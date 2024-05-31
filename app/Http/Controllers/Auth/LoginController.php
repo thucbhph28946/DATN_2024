@@ -7,15 +7,31 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+/**
+ * @tags Auth
+ */
 class LoginController extends Controller
 {
+    /**
+     * Đăng nhập.
+     * @unauthenticated
+     */
+
     public function login(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
+
+            /**
+             * @example nguyenthanhsont123@gmail.com
+             */
             'email' => 'required|string|email',
+            /**
+             * @example thanhson
+             */
             'password' => 'required|string',
         ]);
 
@@ -29,8 +45,7 @@ class LoginController extends Controller
 
         $user = auth()->guard('api')->user(); // lấy data
         $user->tokens()->delete(); // xoá token
-        $deviceName = $request->input('device_name', $request->email); // tạo tên
-        $token = $user->createToken($deviceName, $user->withAccessTokenAbilities()); // tạo mới token
+        $token = $user->createToken($request->email, $user->withAccessTokenAbilities()); // tạo mới token
 
         $data = [
             'success' => true,
@@ -42,19 +57,20 @@ class LoginController extends Controller
                 'role' => $user->role,
             ],
         ];
-
         return response()->json($data, 200);
     }
+    /**
+     * Đăng xuất.
+     *
+     * Cần sử dụng header Authorization Bearer `Token`.
+     */
     public function logout(Request $request)
     {
         if (Auth::guard('api')->check()) { // check login
             Auth::guard('api')->user()->tokens()->delete();
-            return response()->json(['success'=>true,'message' => 'Đăng xuất thành công'], 200);
+            return response()->json(['success' => true, 'message' => 'Đăng xuất thành công'], 200);
         } else {
-            return response()->json(['success'=>false,'message' => 'Không tìm thấy người dùng đăng nhập'], 404);
+            return response()->json(['success' => false, 'message' => 'Không tìm thấy người dùng đăng nhập'], 404);
         }
     }
-
-
-
 }

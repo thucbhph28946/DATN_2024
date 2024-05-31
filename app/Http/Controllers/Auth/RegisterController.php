@@ -10,12 +10,25 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Resources\UserResource;
 
+/**
+ * @tags Auth
+ */
 class RegisterController extends Controller
 {
+    /**
+     * Đăng ký.
+     * @unauthenticated
+     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            /**
+             * @example Nguyễn Thành Sơn
+             */
             'name' => 'required|string|max:100',
+            /**
+             * @example nguyenthanhsont123@gmail.com
+             */
             'email' => 'required|string|email|max:255|unique:users',
             // 'phone' => 'required|string|max:255|unique:users',
             'password' => 'required|string',
@@ -33,7 +46,7 @@ class RegisterController extends Controller
         ]);
         // token check login FE
         $user->tokens()->delete();
-
+        /** @ignoreParam */
         $deviceName = $request->input('device_name', $request->email);
         $token = $user->createToken($deviceName);
 
