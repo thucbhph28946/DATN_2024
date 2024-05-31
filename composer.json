@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "dedoc/scramble": "^0.10.12",
+        "doctrine/dbal": "^3.8",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.3",
@@ -65,7 +67,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
-        }
+        },
+        "use-ziparchive": true
     },
     "minimum-stability": "stable",
     "prefer-stable": true

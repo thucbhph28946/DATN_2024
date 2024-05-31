@@ -1,28 +1,16 @@
 <?php
-/*
- * JobClass - Job Board Web Application
- * Copyright (c) BeDigit. All Rights Reserved
- *
- * Website: https://laraclassifier.com/jobclass
- * Author: BeDigit | https://bedigit.com
- *
- * LICENSE
- * -------
- * This software is furnished under a license and may be used and copied
- * only in accordance with the terms of such license and with the inclusion
- * of the above copyright notice. If you Purchased from CodeCanyon,
- * Please read the full License from here - https://codecanyon.net/licenses/standard
- */
 
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Auth\Social\SaveProviderData;
 use App\Http\Controllers\Auth\Helpers\AuthenticatesUsers;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 
 /**
- * @group Social Auth
+ * @tags Auth
  */
 class SocialController extends Controller
 {
@@ -46,9 +34,15 @@ class SocialController extends Controller
             ),
         ];
     }
+    /**
+     * Đăng nhập bằng Google.
+     * @param string $provider `google`
+     * @unauthenticated
+     */
 
-    public function getProviderTargetUrl(string $provider)
+    public function getProviderTargetUrl(string $provider = "google")
     {
+
         $serviceKey = $this->network[$provider] ?? null;
         if (empty($serviceKey)) {
             $message = sprintf($this->serviceNotFound, $provider);
@@ -77,15 +71,19 @@ class SocialController extends Controller
     }
 
     /**
-     * Get user info
+     * Lấy thông tin người dùng google
      *
-     * @urlParam provider string required The provider's name - Possible values: facebook, linkedin, or google. Example: null
-     *
-     * @param $provider
-     * @return \Illuminate\Http\JsonResponse
+     * @param string $provider `google`
+     * @param string $code Authorization code. Example: 4/0AdLIrYeeHKx5YRnNmGPt9SrrXuOKVOPw9mH47TLrXMwA0SHYpGv3Tyc7h01_Eb_8syaT7A
+     * @param string $scope Scope of the authorization. Example: email profile openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email
+     * @param int $authuser Authenticated user ID. Example: 0
+     * @param string $prompt Prompt type. Example: consent
+     * @param \Illuminate\Http\Request $request HTTP request object
+     * @unauthenticated
      */
-    public function handleProviderCallback($provider)
+    public function handleProviderCallback(Request $request, $provider = "google")
     {
+
         $serviceKey = $this->network[$provider] ?? null;
         if (empty($serviceKey)) {
             $message = sprintf($this->serviceNotFound, $provider);
