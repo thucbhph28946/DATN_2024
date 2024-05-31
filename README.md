@@ -2,6 +2,8 @@
 # NHỚ GIẢI NÉN FILE VENDOR, ĐỔI TÊN FILE FILEENVNE THÀNH .ENV 
 # Vendor: anh em chạy lệnh ở terminal là composer install
 # 'fileenvne' anh em đổi thành .env
+# DEMO API
+https://mwsport.shop/docs/api#/operations/login
 # ĐĂNG NHẬP GIT
 - git config --global user.name "TÊN"
 - git config --global user.email "mail"
