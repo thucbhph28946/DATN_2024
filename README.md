@@ -1,4 +1,4 @@
-# DỰ ÁN SHOP SWSPORT
+# DỰ ÁN SHOP MWSPORT
 # NHỚ GIẢI NÉN FILE VENDOR, ĐỔI TÊN FILE FILEENVNE THÀNH .ENV 
 # Vendor: anh em chạy lệnh ở terminal là composer install
 # 'fileenvne' anh em đổi thành .env
