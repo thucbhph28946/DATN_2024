@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Admin\SubscriberController;
+use App\Http\Controllers\ClientSubscriberController;
 use App\Http\Controllers\Test\CheckController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,8 +41,30 @@ Route::prefix('auth')->group(function () {
 Route::middleware('checkauth')->group(function () {
     Route::get('user',[CheckController::class,'info'])->name('testgetinfo');
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
-    Route::middleware('checkadmin')->group(function () {
+
+    Route::get('user',[CheckController::class,'info'])->name('testgetinfo');
+
+    Route::post('subscriber',[ClientSubscriberController::class,'add'])->name('addSubscriber');
+
+    Route::middleware('checkadmin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('test/admin',[CheckController::class,'admin'])->name('testadmin');
+        Route::prefix('account')->group(
+            function () {
+                Route::get('/', [AccountController::class, 'index'])->name('account');
+                Route::post('add', [AccountController::class, 'add'])->name('postAddAccount');
+                Route::put('edit/{id}', [AccountController::class, 'edit'])->name('postEditAccount');
+                Route::get('delete/{id}', [AccountController::class, 'delete'])->name('deleteAccount')->where(['id' => '[0-9]+']);
+                Route::get('list/trash', [AccountController::class, 'getTrash'])->name('listTrashAccount')->where(['id' => '[0-9]+']);
+
+            }
+        );
+        Route::prefix('subscriber')->group(
+            function () {
+                Route::get('/', [SubscriberController::class, 'index'])->name('subscriber');
+                Route::post('/send', [SubscriberController::class, 'send'])->name('sendSubscriber');
+                Route::post('/save', [SubscriberController::class, 'save'])->name('saveSubscriber');
+            }
+        );
     });
     Route::middleware('checkstaff')->group(function () {
         Route::get('test/staff',[CheckController::class,'staff'])->name('teststaff');

@@ -24,14 +24,16 @@ class RegisterController extends Controller
         $validator = Validator::make($request->all(), [
             /**
              * @example Nguyễn Thành Sơn
+            
              */
+
             'name' => 'required|string|max:100',
             /**
              * @example nguyenthanhsont123@gmail.com
              */
             'email' => 'required|string|email|max:255|unique:users',
-            // 'phone' => 'required|string|max:255|unique:users',
-            'password' => 'required|string',
+
+            'password' => 'required|string|min:5',
         ]);
 
         if ($validator->fails()) {
@@ -40,7 +42,6 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            // 'phone' => $request->phone,
             'role' => 0,
             'password' => Hash::make($request->password),
         ]);
