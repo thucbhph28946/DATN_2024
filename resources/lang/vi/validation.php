@@ -166,6 +166,10 @@ return [
         'deleted_at' => 'Ngày xóa',
         'password_confirmation' => 'Xác thực mật khẩu',
         'token' => 'Token',
+        'username' => 'Tên người dùng',
+        'balance' => 'Tiền',
+        'is_banned' => 'Khoá tài khoản',
+        'role' => 'Quyền',
     ],
 
 ];
